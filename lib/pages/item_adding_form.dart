@@ -90,7 +90,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.numberField(
+                child: MyFormField.textField(
                   label: 'Quantity',
                   value: _quantity,
                   onChanged: (v) {
