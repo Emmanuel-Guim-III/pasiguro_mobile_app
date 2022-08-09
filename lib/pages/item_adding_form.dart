@@ -149,7 +149,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
       type: _type,
       quantity: _quantity,
       dateOfPurchase: _dateOfPurchase,
-      inventoryDate: date_time.getNowDateOnly(),
+      inventoryDateTime: date_time.getNowDateOnly(),
     );
 
     Navigator.popAndPushNamed(context, routes.inventory);
