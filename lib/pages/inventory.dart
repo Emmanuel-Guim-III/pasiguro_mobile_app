@@ -98,7 +98,7 @@ class _InventoryState extends State<Inventory> {
             DataCell(Text(itm.type)),
             DataCell(Text(itm.quantity)),
             DataCell(Text(itm.dateOfPurchase)),
-            DataCell(Text(itm.inventoryDate)),
+            DataCell(Text(itm.inventoryDateTime)),
           ],
           onSelectChanged: (bool? isSelected) {
             _showItemUpdatingForm(item);
@@ -115,7 +115,7 @@ class _InventoryState extends State<Inventory> {
       type: '',
       quantity: '',
       dateOfPurchase: date_time.getNowDateOnly(),
-      inventoryDate: date_time.getDateTimeNow(),
+      inventoryDateTime: date_time.getDateTimeNow(),
     );
 
     Navigator.pushNamed(

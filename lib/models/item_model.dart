@@ -8,7 +8,7 @@ class ItemModel {
   final String type;
   final String quantity;
   final DateTime dateOfPurchase;
-  final DateTime inventoryDate;
+  final DateTime inventoryDateTime;
 
   const ItemModel({
     this.id,
@@ -17,18 +17,20 @@ class ItemModel {
     required this.type,
     required this.quantity,
     required this.dateOfPurchase,
-    required this.inventoryDate,
+    required this.inventoryDateTime,
   });
 
-  factory ItemModel.fromMap(Map<String, dynamic> json) => ItemModel(
-        id: json['id'],
-        name: json['name'],
-        price: json['price'],
-        type: json['type'],
-        quantity: json['quantity'],
-        dateOfPurchase: DateTime.parse(json['dateOfPurchase']),
-        inventoryDate: DateTime.parse(json['inventoryDate']),
-      );
+  factory ItemModel.fromMap(Map<String, dynamic> json) {
+    return ItemModel(
+      id: json['id'],
+      name: json['name'],
+      price: json['price'].toString(),
+      type: json['type'],
+      quantity: json['quantity'],
+      dateOfPurchase: DateTime.parse(json['date_of_purchase']),
+      inventoryDateTime: DateTime.parse(json['inventory_date_time']),
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,8 +39,8 @@ class ItemModel {
       'price': price,
       'type': type,
       'quantity': quantity,
-      'dateOfPurchase': dateOfPurchase.toString(),
-      'inventoryDate': inventoryDate.toString(),
+      'date_of_purchase': dateOfPurchase.toIso8601String(),
+      'inventory_date_time': inventoryDateTime.toIso8601String(),
     };
   }
 
@@ -52,7 +54,7 @@ class ItemModel {
         type: $type, 
         quantity: $quantity, 
         dateOfPurchase: $dateOfPurchase, 
-        inventoryDate: $inventoryDate
+        inventoryDateTime: $inventoryDateTime
       }
     ''';
   }
@@ -65,8 +67,8 @@ class ItemModel {
       type: type,
       quantity: quantity,
       dateOfPurchase: DateFormat('MMM dd, yyyy').format(dateOfPurchase),
-      inventoryDate:
-          DateFormat('MMM dd, yyyy  hh:mm aaa').format(inventoryDate),
+      inventoryDateTime:
+          DateFormat('MMM dd, yyyy  hh:mm aaa').format(inventoryDateTime),
     );
   }
 }
@@ -78,7 +80,7 @@ class ItemResult {
   final String type;
   final String quantity;
   final String dateOfPurchase;
-  final String inventoryDate;
+  final String inventoryDateTime;
 
   const ItemResult({
     required this.id,
@@ -87,6 +89,6 @@ class ItemResult {
     required this.type,
     required this.quantity,
     required this.dateOfPurchase,
-    required this.inventoryDate,
+    required this.inventoryDateTime,
   });
 }
