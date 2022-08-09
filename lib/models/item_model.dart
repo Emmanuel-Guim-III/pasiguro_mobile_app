@@ -7,6 +7,7 @@ class ItemModel {
   final String price;
   final String type;
   final String quantity;
+  final String store;
   final DateTime dateOfPurchase;
   final DateTime inventoryDateTime;
 
@@ -16,6 +17,7 @@ class ItemModel {
     required this.price,
     required this.type,
     required this.quantity,
+    required this.store,
     required this.dateOfPurchase,
     required this.inventoryDateTime,
   });
@@ -27,6 +29,7 @@ class ItemModel {
       price: json['price'].toString(),
       type: json['type'],
       quantity: json['quantity'],
+      store: json['store'],
       dateOfPurchase: DateTime.parse(json['date_of_purchase']),
       inventoryDateTime: DateTime.parse(json['inventory_date_time']),
     );
@@ -39,6 +42,7 @@ class ItemModel {
       'price': price,
       'type': type,
       'quantity': quantity,
+      'store': store,
       'date_of_purchase': dateOfPurchase.toIso8601String(),
       'inventory_date_time': inventoryDateTime.toIso8601String(),
     };
@@ -53,6 +57,7 @@ class ItemModel {
         price: $price, 
         type: $type, 
         quantity: $quantity, 
+        store: $store, 
         dateOfPurchase: $dateOfPurchase, 
         inventoryDateTime: $inventoryDateTime
       }
@@ -66,6 +71,7 @@ class ItemModel {
       price: double.parse(price).toStringAsFixed(2),
       type: type,
       quantity: quantity,
+      store: store,
       dateOfPurchase: DateFormat('MMM dd, yyyy').format(dateOfPurchase),
       inventoryDateTime:
           DateFormat('MMM dd, yyyy  hh:mm aaa').format(inventoryDateTime),
@@ -79,6 +85,7 @@ class ItemResult {
   final String price;
   final String type;
   final String quantity;
+  final String store;
   final String dateOfPurchase;
   final String inventoryDateTime;
 
@@ -88,6 +95,7 @@ class ItemResult {
     required this.price,
     required this.type,
     required this.quantity,
+    required this.store,
     required this.dateOfPurchase,
     required this.inventoryDateTime,
   });

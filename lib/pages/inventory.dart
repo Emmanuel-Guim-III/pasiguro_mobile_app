@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/logics/item_logic.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
@@ -56,6 +57,7 @@ class _InventoryState extends State<Inventory> {
                                 DataColumn(label: Text('Price')),
                                 DataColumn(label: Text('Type')),
                                 DataColumn(label: Text('Quantity')),
+                                DataColumn(label: Text('Store')),
                                 DataColumn(label: Text('Date Of Purchase')),
                                 DataColumn(label: Text('Inventory Date')),
                               ],
@@ -97,6 +99,7 @@ class _InventoryState extends State<Inventory> {
             DataCell(Text(itm.price)),
             DataCell(Text(itm.type)),
             DataCell(Text(itm.quantity)),
+            DataCell(Text(itm.store)),
             DataCell(Text(itm.dateOfPurchase)),
             DataCell(Text(itm.inventoryDateTime)),
           ],
@@ -114,6 +117,7 @@ class _InventoryState extends State<Inventory> {
       price: '',
       type: '',
       quantity: '',
+      store: '',
       dateOfPurchase: date_time.getNowDateOnly(),
       inventoryDateTime: date_time.getDateTimeNow(),
     );
