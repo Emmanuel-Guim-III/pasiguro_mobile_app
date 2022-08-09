@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
 import 'package:pasiguro_mobile_app/page_routes.dart' as routes;
@@ -35,6 +36,10 @@ class ItemAddingFormState extends State<ItemAddingForm> {
   String get _type => typeMem;
   set _type(String v) => typeMem = v;
 
+  String storeMem = '';
+  String get _store => storeMem;
+  set _store(String v) => quantityMem = v;
+
   DateTime dateOfPurchaseMem = date_time.getNowDateOnly();
   DateTime get _dateOfPurchase => dateOfPurchaseMem;
   set _dateOfPurchase(DateTime v) => dateOfPurchaseMem = v;
@@ -47,6 +52,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
     _price = widget.item!.price;
     _quantity = widget.item!.quantity;
     _type = widget.item!.type;
+    _store = widget.item!.store;
     _dateOfPurchase = widget.item!.dateOfPurchase;
   }
 
@@ -116,6 +122,19 @@ class ItemAddingFormState extends State<ItemAddingForm> {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                child: MyFormField.textField(
+                  label: 'Store',
+                  value: _store,
+                  onChanged: (v) {
+                    setState(() {
+                      _store = v;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 child: DatePicker(
                   label: 'Date of Purchase',
                   value: _dateOfPurchase,
@@ -148,6 +167,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
       price: _price,
       type: _type,
       quantity: _quantity,
+      store: _store,
       dateOfPurchase: _dateOfPurchase,
       inventoryDateTime: date_time.getNowDateOnly(),
     );
