@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
-import 'package:pasiguro_mobile_app/page_routes.dart' as routes;
 import 'package:pasiguro_mobile_app/utils/date_time.dart' as date_time;
 import 'package:pasiguro_mobile_app/widgets/date_picker.dart';
 import 'package:pasiguro_mobile_app/widgets/my_form_field.dart';
@@ -38,7 +37,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
 
   String storeMem = '';
   String get _store => storeMem;
-  set _store(String v) => quantityMem = v;
+  set _store(String v) => storeMem = v;
 
   DateTime dateOfPurchaseMem = date_time.getNowDateOnly();
   DateTime get _dateOfPurchase => dateOfPurchaseMem;
@@ -169,10 +168,8 @@ class ItemAddingFormState extends State<ItemAddingForm> {
       quantity: _quantity,
       store: _store,
       dateOfPurchase: _dateOfPurchase,
-      inventoryDateTime: date_time.getNowDateOnly(),
+      inventoryDateTime: date_time.getDateTimeNow(),
     );
-
-    Navigator.popAndPushNamed(context, routes.inventory);
 
     final _itemLogic = LogicProvider.of(context)!.itemLogic;
 
@@ -181,5 +178,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
     } else {
       await _itemLogic.updateItem(item);
     }
+
+    Navigator.pop(context);
   }
 }

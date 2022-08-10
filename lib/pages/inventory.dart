@@ -111,7 +111,7 @@ class _InventoryState extends State<Inventory> {
     ).toList();
   }
 
-  void _showItemAddingForm() {
+  Future<void> _showItemAddingForm() async {
     final item = ItemModel(
       name: '',
       price: '',
@@ -122,15 +122,19 @@ class _InventoryState extends State<Inventory> {
       inventoryDateTime: date_time.getDateTimeNow(),
     );
 
-    Navigator.pushNamed(
+    await Navigator.pushNamed(
       context,
       routes.itemAddingForm,
       arguments: item,
     );
+
+    setState(() {});
   }
 
-  void _deleteItem(int id) {
-    _itemLogic.deleteItem(id);
+  Future<void> _deleteItem(int id) async {
+    await _itemLogic.deleteItem(id);
+    Navigator.pop(context);
+
     setState(() {});
   }
 
@@ -164,11 +168,13 @@ class _InventoryState extends State<Inventory> {
     );
   }
 
-  void _showItemUpdatingForm(ItemModel item) {
-    Navigator.pushNamed(
+  Future<void> _showItemUpdatingForm(ItemModel item) async {
+    await Navigator.pushNamed(
       context,
       routes.itemAddingForm,
       arguments: item,
     );
+
+    setState(() {});
   }
 }
