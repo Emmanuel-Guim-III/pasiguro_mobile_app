@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+typedef ValidatorCallback = String? Function(String?);
+typedef TappedCallback = void Function();
+
 class MyFormField {
   static TextFormField textField({
     required String value,
     required String label,
     required ValueChanged onChanged,
+    ValidatorCallback? onValidate,
+    TappedCallback? onTapped,
   }) {
     return TextFormField(
       initialValue: value,
@@ -13,7 +18,9 @@ class MyFormField {
         border: const OutlineInputBorder(),
         labelText: label,
       ),
+      validator: onValidate,
       onChanged: onChanged,
+      onTap: onTapped,
     );
   }
 
@@ -21,6 +28,8 @@ class MyFormField {
     required String value,
     required String label,
     required ValueChanged onChanged,
+    ValidatorCallback? onValidate,
+    TappedCallback? onTapped,
   }) {
     return TextFormField(
       initialValue: value,
@@ -29,7 +38,9 @@ class MyFormField {
         labelText: label,
       ),
       keyboardType: TextInputType.number,
+      validator: onValidate,
       onChanged: onChanged,
+      onTap: onTapped,
     );
   }
 
@@ -37,6 +48,8 @@ class MyFormField {
     required String value,
     required String label,
     required ValueChanged onChanged,
+    ValidatorCallback? onValidate,
+    TappedCallback? onTapped,
   }) {
     return TextFormField(
       initialValue: value,
@@ -46,7 +59,9 @@ class MyFormField {
         suffixText: 'PHP',
       ),
       keyboardType: TextInputType.number,
+      validator: onValidate,
       onChanged: onChanged,
+      onTap: onTapped,
     );
   }
 }

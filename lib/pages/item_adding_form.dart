@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
 import 'package:pasiguro_mobile_app/utils/date_time.dart' as date_time;
+import 'package:pasiguro_mobile_app/utils/text_field_validator.dart';
 import 'package:pasiguro_mobile_app/widgets/date_picker.dart';
 import 'package:pasiguro_mobile_app/widgets/my_form_field.dart';
 
@@ -43,6 +44,8 @@ class ItemAddingFormState extends State<ItemAddingForm> {
   DateTime get _dateOfPurchase => dateOfPurchaseMem;
   set _dateOfPurchase(DateTime v) => dateOfPurchaseMem = v;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -64,121 +67,146 @@ class ItemAddingFormState extends State<ItemAddingForm> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.textField(
-                  label: 'Name',
-                  value: _name,
-                  onChanged: (v) {
-                    setState(() {
-                      _name = v;
-                    });
-                  },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: MyFormField.textField(
+                    label: 'Name',
+                    value: _name,
+                    onValidate: (v) => TextFieldValidator.validate(v),
+                    onTapped: () {
+                      _formKey.currentState!.reset();
+                    },
+                    onChanged: (v) {
+                      setState(() {
+                        _name = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.priceField(
-                  label: 'Price',
-                  value: _price,
-                  onChanged: (v) {
-                    setState(() {
-                      _price = v;
-                    });
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: MyFormField.priceField(
+                    label: 'Price',
+                    value: _price,
+                    onValidate: (v) => TextFieldValidator.validate(v),
+                    onTapped: () {
+                      _formKey.currentState!.reset();
+                    },
+                    onChanged: (v) {
+                      setState(() {
+                        _price = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.textField(
-                  label: 'Quantity',
-                  value: _quantity,
-                  onChanged: (v) {
-                    setState(() {
-                      _quantity = v;
-                    });
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: MyFormField.textField(
+                    label: 'Quantity',
+                    value: _quantity,
+                    onValidate: (v) => TextFieldValidator.validate(v),
+                    onTapped: () {
+                      _formKey.currentState!.reset();
+                    },
+                    onChanged: (v) {
+                      setState(() {
+                        _quantity = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.textField(
-                  label: 'Type',
-                  value: _type,
-                  onChanged: (v) {
-                    setState(() {
-                      _type = v;
-                    });
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: MyFormField.textField(
+                    label: 'Type',
+                    value: _type,
+                    onValidate: (v) => TextFieldValidator.validate(v),
+                    onTapped: () {
+                      _formKey.currentState!.reset();
+                    },
+                    onChanged: (v) {
+                      setState(() {
+                        _type = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: MyFormField.textField(
-                  label: 'Store',
-                  value: _store,
-                  onChanged: (v) {
-                    setState(() {
-                      _store = v;
-                    });
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: MyFormField.textField(
+                    label: 'Store',
+                    value: _store,
+                    onValidate: (v) => TextFieldValidator.validate(v),
+                    onTapped: () {
+                      _formKey.currentState!.reset();
+                    },
+                    onChanged: (v) {
+                      setState(() {
+                        _store = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: DatePicker(
-                  label: 'Date of Purchase',
-                  value: _dateOfPurchase,
-                  onChanged: (v) {
-                    setState(() {
-                      _dateOfPurchase = v;
-                    });
-                  },
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: DatePicker(
+                    label: 'Date of Purchase',
+                    value: _dateOfPurchase,
+                    onChanged: (v) {
+                      setState(() {
+                        _dateOfPurchase = v;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                child: ElevatedButton(
-                  child: const Text('Save'),
-                  onPressed: () => _saveItem(widget.item!.id),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                  child: ElevatedButton(
+                    child: const Text('Save'),
+                    onPressed: () => _saveItem(widget.item!.id),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _saveItem(int? id) async {
-    final item = ItemModel(
-      id: id,
-      name: _name,
-      price: _price,
-      type: _type,
-      quantity: _quantity,
-      store: _store,
-      dateOfPurchase: _dateOfPurchase,
-      inventoryDateTime: date_time.getDateTimeNow(),
-    );
+  Future<void> _saveItem(int? id) async {
+    if (_formKey.currentState!.validate()) {
+      final item = ItemModel(
+        id: id,
+        name: _name,
+        price: _price,
+        type: _type,
+        quantity: _quantity,
+        store: _store,
+        dateOfPurchase: _dateOfPurchase,
+        inventoryDateTime: date_time.getDateTimeNow(),
+      );
 
-    final _itemLogic = LogicProvider.of(context)!.itemLogic;
+      final _itemLogic = LogicProvider.of(context)!.itemLogic;
 
-    if (id == null) {
-      await _itemLogic.createItem(item);
-    } else {
-      await _itemLogic.updateItem(item);
+      if (id == null) {
+        await _itemLogic.createItem(item);
+      } else {
+        await _itemLogic.updateItem(item);
+      }
+
+      Navigator.pop(context);
     }
-
-    Navigator.pop(context);
   }
 }
