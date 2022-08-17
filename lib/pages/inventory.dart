@@ -4,6 +4,7 @@ import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/logics/item_logic.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
 import 'package:pasiguro_mobile_app/page_routes.dart' as routes;
+import 'package:pasiguro_mobile_app/pages/item_adding_form.dart';
 import 'package:pasiguro_mobile_app/utils/date_time.dart' as date_time;
 
 class Inventory extends StatefulWidget {
@@ -38,9 +39,8 @@ class _InventoryState extends State<Inventory> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                 child: FutureBuilder<List<ItemModel>>(
-                  future: _itemLogic.getItems(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ItemModel>> items) {
+                  future: _itemLogic.getItems(fresh: true),
+                  builder: (context, AsyncSnapshot<List<ItemModel>> items) {
                     if (!items.hasData) {
                       return const Center(child: Text('Loading...'));
                     }
@@ -125,14 +125,24 @@ class _InventoryState extends State<Inventory> {
     await Navigator.pushNamed(
       context,
       routes.itemAddingForm,
-      arguments: item,
+      arguments: ItemObject(itemLogic: _itemLogic, item: item),
     );
 
     setState(() {});
   }
 
-  Future<void> _deleteItem(int id) async {
-    await _itemLogic.deleteItem(id);
+  Future<void> _showItemUpdatingForm(ItemModel item) async {
+    await Navigator.pushNamed(
+      context,
+      routes.itemAddingForm,
+      arguments: ItemObject(itemLogic: _itemLogic, item: item),
+    );
+
+    setState(() {});
+  }
+
+  Future<void> _deleteItem(int? id) async {
+    await _itemLogic.deleteItem(id!);
     Navigator.pop(context);
 
     setState(() {});
@@ -148,7 +158,7 @@ class _InventoryState extends State<Inventory> {
 
     final yesBtn = TextButton(
       onPressed: () {
-        _deleteItem(item.id ?? 0);
+        _deleteItem(item.id);
       },
       child: const Text('Yes'),
     );
@@ -166,15 +176,5 @@ class _InventoryState extends State<Inventory> {
         );
       },
     );
-  }
-
-  Future<void> _showItemUpdatingForm(ItemModel item) async {
-    await Navigator.pushNamed(
-      context,
-      routes.itemAddingForm,
-      arguments: item,
-    );
-
-    setState(() {});
   }
 }

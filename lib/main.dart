@@ -3,7 +3,6 @@ import 'package:pasiguro_mobile_app/logic_provider.dart';
 import 'package:pasiguro_mobile_app/logics/appointment_logic.dart';
 import 'package:pasiguro_mobile_app/logics/item_logic.dart';
 import 'package:pasiguro_mobile_app/models/appointment_model.dart';
-import 'package:pasiguro_mobile_app/models/item_model.dart';
 import 'package:pasiguro_mobile_app/pages/create_appointment_form.dart';
 import 'package:pasiguro_mobile_app/pages/appointments.dart';
 import 'package:pasiguro_mobile_app/pages/inventory.dart';
@@ -70,7 +69,7 @@ Route<MaterialPageRoute> _getRoute(RouteSettings settings) {
       return MaterialPageRoute(
         settings: settings,
         builder: (_) => ItemAddingForm(
-          item: settings.arguments as ItemModel,
+          itemObject: settings.arguments as ItemObject,
         ),
         fullscreenDialog: true,
       );
