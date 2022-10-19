@@ -8,15 +8,15 @@ const hostName = 'https://pasiguro-api.herokuapp.com';
 const path = '/api/v1/items';
 
 abstract class ItemService {
-  Future<int> createItem(ItemModel item);
+  Future<bool> createItem(ItemModel item);
   Future<List<ItemModel>> getItems();
-  Future<int> updateItem(ItemModel item);
-  Future<int> deleteItem(int id);
+  Future<bool> updateItem(ItemModel item);
+  Future<bool> deleteItem(int id);
 }
 
 class ItemServiceImpl implements ItemService {
   @override
-  Future<int> createItem(ItemModel item) async {
+  Future<bool> createItem(ItemModel item) async {
     final client = http.Client();
     final uri = Uri.parse('$hostName$path');
     final Map<String, String> headers = {'Content-Type': 'application/json'};
@@ -24,9 +24,9 @@ class ItemServiceImpl implements ItemService {
 
     final response = await client.post(uri, headers: headers, body: body);
 
-    if (response.statusCode != 200) return 0;
+    if (response.statusCode != 200) return false;
 
-    return 1;
+    return true;
   }
 
   @override
@@ -43,7 +43,7 @@ class ItemServiceImpl implements ItemService {
   }
 
   @override
-  Future<int> updateItem(ItemModel item) async {
+  Future<bool> updateItem(ItemModel item) async {
     final client = http.Client();
     final uri = Uri.parse('$hostName$path/${item.id}');
     final Map<String, String> headers = {'Content-Type': 'application/json'};
@@ -51,19 +51,19 @@ class ItemServiceImpl implements ItemService {
 
     final response = await client.put(uri, headers: headers, body: body);
 
-    if (response.statusCode != 200) return 0;
+    if (response.statusCode != 200) return false;
 
-    return 1;
+    return true;
   }
 
   @override
-  Future<int> deleteItem(int id) async {
+  Future<bool> deleteItem(int id) async {
     final client = http.Client();
     final uri = Uri.parse('$hostName$path/$id');
     final response = await client.delete(uri);
 
-    if (response.statusCode != 200) return 0;
+    if (response.statusCode != 200) return false;
 
-    return 1;
+    return true;
   }
 }

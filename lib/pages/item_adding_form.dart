@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
 
-import 'package:pasiguro_mobile_app/logic_provider.dart';
+import 'package:pasiguro_mobile_app/logics/item_logic.dart';
 import 'package:pasiguro_mobile_app/models/item_model.dart';
 import 'package:pasiguro_mobile_app/utils/date_time.dart' as date_time;
 import 'package:pasiguro_mobile_app/utils/text_field_validator.dart';
 import 'package:pasiguro_mobile_app/widgets/date_picker.dart';
 import 'package:pasiguro_mobile_app/widgets/my_form_field.dart';
 
-class ItemAddingForm extends StatefulWidget {
+typedef OptionSelected = void Function(String value);
+
+class ItemObject {
+  final ItemLogic itemLogic;
   final ItemModel? item;
+
+  ItemObject({
+    required this.itemLogic,
+    this.item,
+  });
+}
+
+class ItemAddingForm extends StatefulWidget {
+  final ItemObject itemObject;
 
   const ItemAddingForm({
     Key? key,
-    this.item,
+    required this.itemObject,
   }) : super(key: key);
 
   @override
@@ -46,16 +58,26 @@ class ItemAddingFormState extends State<ItemAddingForm> {
 
   final _formKey = GlobalKey<FormState>();
 
+  late List<ItemModel> _itemsList;
+
+  bool _isEditingMode = false;
+
   @override
   void initState() {
     super.initState();
 
-    _name = widget.item!.name;
-    _price = widget.item!.price;
-    _quantity = widget.item!.quantity;
-    _type = widget.item!.type;
-    _store = widget.item!.store;
-    _dateOfPurchase = widget.item!.dateOfPurchase;
+    _setItemFields();
+
+    _isEditingMode = widget.itemObject.item!.id != null;
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+
+    if (!_isEditingMode) {
+      _setItemsList();
+    }
   }
 
   @override
@@ -72,21 +94,25 @@ class ItemAddingFormState extends State<ItemAddingForm> {
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                  child: MyFormField.textField(
-                    label: 'Name',
-                    value: _name,
-                    onValidate: (v) => TextFieldValidator.validate(v),
-                    onTapped: () {
-                      _formKey.currentState!.reset();
-                    },
-                    onChanged: (v) {
-                      setState(() {
-                        _name = v;
-                      });
-                    },
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: 10,
                   ),
+                  child: !_isEditingMode
+                      ? _buildAutoPopulationField()
+                      : MyFormField.textField(
+                          label: 'Name',
+                          value: _name,
+                          onValidate: (v) => TextFieldValidator.validate(v),
+                          onTapped: () {
+                            _formKey.currentState!.reset();
+                          },
+                          onChanged: (v) {
+                            setState(() {
+                              _name = v;
+                            });
+                          },
+                        ),
                 ),
                 Padding(
                   padding:
@@ -174,7 +200,7 @@ class ItemAddingFormState extends State<ItemAddingForm> {
                       const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                   child: ElevatedButton(
                     child: const Text('Save'),
-                    onPressed: () => _saveItem(widget.item!.id),
+                    onPressed: () => _saveItem(widget.itemObject.item!.id),
                   ),
                 ),
               ],
@@ -182,6 +208,70 @@ class ItemAddingFormState extends State<ItemAddingForm> {
           ),
         ),
       ),
+    );
+  }
+
+  _buildAutoPopulationField() {
+    return Autocomplete(
+      optionsBuilder: (TextEditingValue value) {
+        if (value.text.isEmpty) {
+          return const Iterable<String>.empty();
+        }
+
+        return _itemsList.where((item) =>
+            item.name.toLowerCase().contains(value.text.toLowerCase()));
+      },
+
+      //
+      optionsViewBuilder: (
+        context,
+        OptionSelected onSelected,
+        options,
+      ) {
+        return Material(
+          elevation: 4,
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemBuilder: (ctx, idx) {
+              final ItemModel option = options.elementAt(idx) as ItemModel;
+
+              return ListTile(
+                title: Text(option.name),
+                subtitle: Text(option.store),
+                onTap: () {
+                  _autoPopulateAllFields(option);
+                  onSelected(option.name);
+                },
+              );
+            },
+            separatorBuilder: (ctx, idx) => const Divider(),
+            itemCount: options.length,
+          ),
+        );
+      },
+
+      //
+      fieldViewBuilder: (
+        context,
+        controller,
+        focusNode,
+        onEditingComplete,
+      ) {
+        return TextFormField(
+          controller: controller,
+          focusNode: focusNode,
+          textCapitalization: TextCapitalization.sentences,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: 'Name',
+          ),
+          onChanged: (v) {
+            setState(() {
+              _name = v;
+            });
+          },
+        );
+      },
     );
   }
 
@@ -198,15 +288,41 @@ class ItemAddingFormState extends State<ItemAddingForm> {
         inventoryDateTime: date_time.getDateTimeNow(),
       );
 
-      final _itemLogic = LogicProvider.of(context)!.itemLogic;
-
       if (id == null) {
-        await _itemLogic.createItem(item);
+        await widget.itemObject.itemLogic.createItem(item);
       } else {
-        await _itemLogic.updateItem(item);
+        await widget.itemObject.itemLogic.updateItem(item);
       }
 
       Navigator.pop(context);
     }
+  }
+
+  Future<void> _setItemsList() async {
+    final items = await widget.itemObject.itemLogic.getItems();
+
+    setState(() {
+      _itemsList = items;
+    });
+  }
+
+  void _setItemFields() {
+    _name = widget.itemObject.item!.name;
+    _price = widget.itemObject.item!.price;
+    _quantity = widget.itemObject.item!.quantity;
+    _type = widget.itemObject.item!.type;
+    _store = widget.itemObject.item!.store;
+    _dateOfPurchase = widget.itemObject.item!.dateOfPurchase;
+  }
+
+  void _autoPopulateAllFields(ItemModel item) {
+    setState(() {
+      _name = item.name;
+      _price = item.price;
+      _quantity = item.quantity;
+      _type = item.type;
+      _store = item.store;
+      _dateOfPurchase = item.dateOfPurchase;
+    });
   }
 }
